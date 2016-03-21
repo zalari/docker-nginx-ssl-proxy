@@ -64,9 +64,24 @@ To run an SSL termination proxy you must have an existing SSL certificate and ke
       -v /path/to/secrets/htpasswd:/etc/secrets/htpasswd \
       nginx-ssl-proxy
     ```
-4. **Add additional nginx config**
+4. **Modifying X_FRAME_OPTIONS**
 
-   All *.conf from [nginx/extra](nginx/extra) are added during *built* to **/etc/nginx/extra-conf.d** and get included on startup of the container. Using volumes you can overwrite them on *start* of the container:
+   By default, when SSL is used, the [X_FRAME_OPTIONS](https://developer.mozilla.org/en-US/docs/Web/HTTP/X-Frame-Options) Header is set to DENY, you can overwrite this behaviour by setting the X_FRAME_OPTIONS env variable:
+
+   ```shell
+   docker run \
+     -e ENABLE_SSL=true \
+     -e X_FRAME_OPTIONS=SAMEORIGIN \
+     -e TARGET_SERVICE=THE_ADDRESS_OR_HOST_YOU_ARE_PROXYING_TO \
+     -v /path/to/secrets/cert.crt:/etc/secrets/proxycert \
+     -v /path/to/secrets/key.pem:/etc/secrets/proxykey \
+     -v /path/to/secrets/dhparam.pem:/etc/secrets/dhparam \
+     -v /path/to/secrets/htpasswd:/etc/secrets/htpasswd \
+     nginx-ssl-proxy
+   ```
+5. **Add additional nginx config**
+
+   All .conf from [nginx/extra](nginx/extra) are added during *build* to **/etc/nginx/extra-conf.d** and get included on startup of the container. Using volumes you can overwrite them on *start* of the container:
 
     ```shell
     docker run \

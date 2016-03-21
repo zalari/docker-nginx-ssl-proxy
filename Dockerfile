@@ -19,6 +19,8 @@ FROM nginx
 
 MAINTAINER Evan Brown <evanbrown@google.com>
 
+ENV X_FRAME_OPTIONS DENY
+
 RUN rm /etc/nginx/conf.d/*.conf
 
 RUN mkdir -p /etc/nginx/extra-conf.d

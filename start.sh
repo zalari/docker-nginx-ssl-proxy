@@ -16,6 +16,8 @@
 if [ -n "${ENABLE_SSL+1}" ] && [ "${ENABLE_SSL,,}" = "true" ]; then
   echo "Enabling SSL..."
   cp /usr/src/proxy_ssl.conf /etc/nginx/conf.d/proxy.conf
+  # X_FRAME_OPTIONS are only set, when SSL is enabled
+  sed -i "s/{{X_FRAME_OPTIONS}}/${X_FRAME_OPTIONS}/g;" /etc/nginx/conf.d/proxy.conf
 else
   # No SSL
   cp /usr/src/proxy_nossl.conf /etc/nginx/conf.d/proxy.conf
